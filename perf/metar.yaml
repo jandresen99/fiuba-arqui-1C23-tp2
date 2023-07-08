@@ -1,0 +1,42 @@
+config:
+  target: "{{ $processEnvironment.TARGET }}"
+  plugins:
+    publish-metrics:
+      - type: datadog
+        apiKey: "{{ $processEnvironment.DATADOG_API_KEY }}"
+        prefix: "artillery."
+        tags:
+          - "test:metar"
+
+  phases:
+    - name: Pause
+      pause: 5
+    - name: Start
+      duration: 30
+      arrivalRate: 1
+    - name: Ramp Up
+      duration: 60
+      arrivalRate: 1
+      rampTo: 5
+    - name: Plain
+      duration: 60
+      arrivalRate: 5
+    - name: Slow down
+      duration: 60
+      arrivalRate: 5
+      rampTo: 1
+  variables:
+    station:
+      - 'SAEZ'
+      - 'KSFO'
+      - 'KJFK'
+      - 'EGLL'
+      - 'OMDB'
+
+scenarios:
+  - name: Metar (/metar)
+    flow:
+      - get:
+          url: '/metar'
+          qs: 
+            station: '{{ station }}'

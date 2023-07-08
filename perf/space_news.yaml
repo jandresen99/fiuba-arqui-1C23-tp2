@@ -1,0 +1,34 @@
+config:
+  target: "{{ $processEnvironment.TARGET }}"
+  plugins:
+    publish-metrics:
+      - type: datadog
+        apiKey: "{{ $processEnvironment.DATADOG_API_KEY }}"
+        prefix: "artillery."
+        tags:
+          - "test:space_news"
+
+  phases:
+    - name: Pause
+      pause: 5
+    - name: Start
+      duration: 30
+      arrivalRate: 1
+    - name: Ramp Up
+      duration: 60
+      arrivalRate: 1
+      rampTo: 5
+    - name: Plain
+      duration: 60
+      arrivalRate: 5
+    - name: Slow down
+      duration: 60
+      arrivalRate: 5
+      rampTo: 1
+    
+
+scenarios:
+  - name: Space News (/space_news)
+    flow:
+      - get:
+          url: '/space_news'
