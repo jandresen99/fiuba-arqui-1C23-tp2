@@ -17,8 +17,8 @@ const connectDatadog = datadog(config.datadog);
 app.use(connectDatadog);
 
 const statsd = new StatsD({
-  host: 'localhost',//aca no se decir bien que host deberia ir
-  port: 8125, //aca tampoco, creo hay que setear conn las de datadog
+  host: 'localhost',
+  port: 8125,
 });
 
 // Routes
@@ -130,9 +130,8 @@ app.get('/space_news', async (req, res) => {
 
 // Endpoint para obtener un hecho sin utilidad
 app.get('/fact', async (req, res) => {
+  const startTime = Date.now();
   try {
-    const startTime = Date.now();
-
     let idReq;
 
     // Make the first request to obtain the ID
