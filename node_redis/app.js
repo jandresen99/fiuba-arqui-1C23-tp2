@@ -7,6 +7,12 @@ import { XMLParser } from 'fast-xml-parser';
 import { decode } from 'metar-decoder';
 import datadog from 'connect-datadog';
 import { createClient } from 'redis';
+import { StatsD } from 'hot-shots';
+
+const statsd = new StatsD({
+  host: 'localhost',//aca no se decir bien que host deberia ir
+  port: 8125, //aca tampoco, creo hay que setear conn las de datadog
+});
 
 // Create app
 const app = express();
@@ -41,11 +47,15 @@ app.get('/', (req, res) => res.send('Hello World!'));
 app.get('/test', wrapped(getTestValue));
 // Endpoint de ping para healthcheck
 app.get('/ping', (req, res) => {
+  const startTime = Date.now();
   res.send('pong');
+  const elapsed = Date.now() - startTime; // calcula la duración en milisegundos
+  statsd.timing('customMetric.ping', elapsed); // Envía la demora a StatsD
 }
 );
 // Endpoint para obtener información METAR de un aeropuerto
 app.get('/metar', async (req, res) => {
+  const startTime = Date.now();
   const station = req.query.station;
 
   try {
@@ -64,9 +74,12 @@ app.get('/metar', async (req, res) => {
           };
           res.json(responseObject);
         } else {
+          const startTimeRequest = Date.now();
           // Make the second request to retrieve METAR information
           axios.get(`https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=${station}&hoursBeforeNow=1`)
             .then(response => {
+              const elapsedRequest = Date.now() - startTimeRequest; // calcula la duración en milisegundos
+              statsd.timing('customMetric.metar_request_time', elapsedRequest);
               const parsed = parser.parse(response.data);
 
               if (parsed.response.data.METAR) {
@@ -102,11 +115,16 @@ app.get('/metar', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send('Error al procesar la solicitud');
+  }finally {
+    const endTime = Date.now(); // registra el tiempo de finalización
+    const elapsed = endTime - startTime; // calcula la duración en milisegundos
+    statsd.timing('customMetric.metar', elapsed);
   }
 });
 
 // Endpoint para obtener los títulos de las 5 últimas noticias sobre actividad espacial
 app.get('/space_news', async (req, res) => {
+  const startTime = Date.now();
   try {
     let idReq;
     redisClient.get('news')
@@ -124,9 +142,12 @@ app.get('/space_news', async (req, res) => {
           };
           res.json(responseObject);
         } else {
+          const startTimeRequest = Date.now();
           // Make the second request to fetch space news articles
           axios.get('https://api.spaceflightnewsapi.net/v3/articles?_limit=5')
             .then(response => {
+              const elapsedRequest = Date.now() - startTimeRequest; // calcula la duración en milisegundos
+              statsd.timing('customMetric.space_news_request_time', elapsedRequest);
               const news = response.data.map(item => item.title);
               // Await the redisClient.set operation wrapped in a Promise
                 redisClient.set('news', JSON.stringify(news), { EX: 5 })
@@ -156,6 +177,10 @@ app.get('/space_news', async (req, res) => {
   } catch (error) {
     console.error("Error al procesar la solicitud", error);
     res.status(500).send('Error al procesar la solicitud');
+  } finally {
+    const endTime = Date.now(); // registra el tiempo de finalización
+    const elapsed = endTime - startTime; // calcula la duración en milisegundos
+    statsd.timing('customMetric.space_news', elapsed); // Envía la demora a StatsD
   }
 });
 
@@ -163,6 +188,7 @@ app.get('/space_news', async (req, res) => {
 
 // Endpoint para obtener un hecho sin utilidad
 app.get('/fact', async (req, res) => {
+  const startTime = Date.now();
   try {
     let idReq;
     redisClient.get('fact')
@@ -178,9 +204,12 @@ app.get('/fact', async (req, res) => {
           };
           res.json(responseObject);
         } else {
+          const startTimeRequest = Date.now();
           // Make the second request to fetch a random fact
           axios.get('https://uselessfacts.jsph.pl/random.json?language=en')
             .then(response => {
+              const elapsedRequest = Date.now() - startTimeRequest; // calcula la duración en milisegundos
+              statsd.timing('customMetric.fact_request_time', elapsedRequest);
               const fact = response.data.text;
                 redisClient.set('fact', JSON.stringify(fact), { EX: 5 })
                 .then(() => {
@@ -210,6 +239,10 @@ app.get('/fact', async (req, res) => {
     let errorStr = `Error al procesar la solicitud ${error}`
     console.error(errorStr);
     res.status(500).send(errorStr);
+  } finally {
+    const endTime = Date.now(); // registra el tiempo de finalización
+    const elapsed = endTime - startTime; // calcula la duración en milisegundos
+    statsd.timing('customMetric.fact', elapsed); // Envía la demora a StatsD
   }
 });
 
