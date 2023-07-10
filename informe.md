@@ -54,9 +54,6 @@ A continuación se evaluarán 2 configuraciones que buscarán mejorar atributos 
 ## Configuracion 2: Un servidor con Redis
 Esta configuración es exactamente igual que la anterior con el agregado de una caché que será muy util para almacenar ciertos datos. La política de caché utilizada consiste en que cada vez que se hace una petición a una API externa, el recurso obtenido se almacena durante 5 segundos en la caché.
 
-#### Estadisticas para endpoint /fact
-![config_2_space_news](./imagenes_nuevas/config_2_fact.png "Estadisticas para endpoint /fact")
-
 #### Estadisticas para endpoint /space_news
 ![config_2_space_news](./imagenes_nuevas/config_2_news.png "Estadisticas para endpoint /space_news")
 
