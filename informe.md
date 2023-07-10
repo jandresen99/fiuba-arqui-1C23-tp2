@@ -87,7 +87,10 @@ Al haber un mayor numero de instancias aumenta la cantidad de solicitudes que pu
 Sin embargo, no se disminuyo el tiempo de respuesta.
 
 ## **Conclusión**
-
 Tras analizar los resultados, se pudo comprobar que el agregado de la caché mejoró la performance del servicio, y multiplicar las instancias del servidor permitió mejorar la confiabilidad y la escalabilidad.
 
 Ambas tacticas utilizadas permiten disminuir la cantidad de requests realizadas a la API externa, lo que permite aumentar la cantidad de peticiones exitosas de nuestro servicio. La opción de la cache tiene la ventaja de ser más económica y de impactar también positivamente en la performance, por lo que sería la primer táctica a implementar .
+
+El tercer caso demuestra los beneficios de montar este tipo de sistemas en la nube, utilizando Terraform y Ansible, ya que nos permitieron escalar de manera horizontal  rapidamente, sin realizar demasiadas configuraciones adicionales.
+
+Mientras que Datadog nos sirvio para poder analizar cuantos recursos son necesarios para soportar la cantidad de trafico esperada.
