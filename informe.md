@@ -34,16 +34,19 @@ A continuación se analizará el rendimiento de tres configuraciones distintas.
 Esta configuración consiste en una sola instancia de la aplicación sin utilizar cache. Es decir que todos los requests van a ser manejados por este único servidor. Este será tomado como el caso base. Solo se marcarán los aspectos salientes obtenidos de esta prueba, a efectos de ser usados como punto de comparación en los siguientes escenarios.
 
 #### Estadisticas para endpoint /fact
-![config_1_fact](./imagenes/config_1_fact.png "Estadisticas para endpoint /fact")
+![config_1_fact](./imagenes_nuevas/config_1_fact.png "Estadisticas para endpoint /fact")
 
 #### Estadisticas para endpoint /space_news
-![config_1_space_news](./imagenes/config_1_space_news.png "Estadisticas para endpoint /space_news")
+![config_1_space_news](./imagenes_nuevas/config_1_space_news.png "Estadisticas para endpoint /space_news")
+
+#### Estadisticas para endpoint /space_news con 1 request cada 2 segundos
+![config_1_space_news](./imagenes_nuevas/config_1_space_news_slow.png "Estadisticas para endpoint /space_news")
 
 #### Estadisticas para endpoint /metar
-![config_1_metar](./imagenes/config_1_metar.png "Estadisticas para endpoint /metar")
+![config_1_metar](./imagenes_nuevas/config_1_metar.png "Estadisticas para endpoint /metar")
 
 #### Estadisticas para todos los endpoints en conjunto
-![config_1_full](./imagenes/config_1_full.png "Estadisticas para full")
+![config_1_full](./imagenes_nuevas/config_1_full.png "Estadisticas para full")
 
 La configuración 1, que consiste en una sola instancia de la aplicación sin utilizar cache, funciona "mal" para los tres endpoints (/fact, /space_news y /metar) y para todos ellos en conjunto, ya que tiene un alto porcentaje de fallas (gráfico de tipos de respuesta, donde azul es 200 y rojo es 500) en las solicitudes y el promedio de los tiempos de respuesta del cliente son cercanos al doble que los del servidor. La cantidad de errores que se devuelven se debe a que la API externa tiene un rate limit, a partir del cual las request empiezan a devolver error.
 
@@ -55,10 +58,13 @@ A continuación se evaluarán 2 configuraciones que buscarán mejorar atributos 
 Esta configuración es exactamente igual que la anterior con el agregado de una caché que será muy util para almacenar ciertos datos. La política de caché utilizada consiste en que cada vez que se hace una petición a una API externa, el recurso obtenido se almacena durante 5 segundos en la caché.
 
 #### Estadisticas para endpoint /space_news
-![config_2_space_news](./imagenes/config_2_space_news.png "Estadisticas para endpoint /space_news")
+![config_2_space_news](./imagenes_nuevas/config_2_space_news.png "Estadisticas para endpoint /space_news")
+
+#### Estadisticas para endpoint /space_news con 1 request cada 2 segundos
+![config_2_space_news](./imagenes_nuevas/config_2_space_news_slow.png "Estadisticas para endpoint /space_news")
 
 #### Estadisticas para endpoint /metar
-![config_2_metar](./imagenes/config_2_metar.png "Estadisticas para endpoint /metar")
+![config_2_metar](./imagenes_nuevas/config_2_metar.png "Estadisticas para endpoint /metar")
 
 La configuración 2, que consiste en una sola instancia de la aplicación con cache, funciona mejor que la configuración 1 para los dos endpoints que probamos (/metar y /space_news), ya que mejora el tiempo de respuesta del servidor.
 
@@ -68,15 +74,19 @@ Sin embargo, sigue habiendo muchas requests fallidas. Para atacar ese problema, 
 Esta última configuración consiste en tres instancias de la aplicación corriendo detras de un load balancer.
 
 #### Estadisticas para endpoint /fact
-![config_3_fact](./imagenes/config_3_fact.png "Estadisticas para endpoint /fact")
+![config_3_fact](./imagenes_nuevas/config_3_fact.png "Estadisticas para endpoint /fact")
 
 #### Estadisticas para endpoint /space_news
-![config_3_space_news](./imagenes/config_3_space_news.png "Estadisticas para endpoint /space_news")
+![config_3_space_news](./imagenes_nuevas/config_3_space_news.png "Estadisticas para endpoint /space_news")
+
+#### Estadisticas para endpoint /space_news con 1 request cada 2 segundos
+![config_3_space_news](./imagenes_nuevas/config_3_space_news_slow.png "Estadisticas para endpoint /space_news")
 
 #### Estadisticas para endpoint /metar
-![config_3_metar](./imagenes/config_3_metar.png "Estadisticas para endpoint /metar")
+![config_3_metar](./imagenes_nuevas/config_3_metar.png "Estadisticas para endpoint /metar")
+
 #### Estadisticas para todos los endpoints en conjunto
-![config_3_full](./imagenes/config_3_full.png "Estadisticas para full")
+![config_3_full](./imagenes_nuevas/config_3_full.png "Estadisticas para full")
 
 Al aumentar las instancias de la aplicación, se obuvieron tiempos de respuesta similares. Esto lleva a pensar que la limitante del tiempo de respuesta está dado por el llamado a la API externa, y no se ve afectado al agregar instancias.
 
