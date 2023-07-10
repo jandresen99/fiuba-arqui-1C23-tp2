@@ -65,7 +65,7 @@ Esta configuración es exactamente igual que la anterior con el agregado de una 
 
 La configuración 2, que consiste en una sola instancia de la aplicación con cache, funciona mejor que la configuración 1 para los dos endpoints que probamos (/metar y /space_news), ya que mejora el tiempo de respuesta del servidor.
 
-Sin embargo, sigue habiendo muchas requests fallidas. Para atacar ese problema, una posible solución sería agrandar la caché. Por ejemplo, en el endpoint de metar esto permitiría que se almacene el resultado de varias de las estaciones, lo que disminuiría aún más la cantidad de requests realizadas a la API externa, evitando explotar el rate limit. También se podría elevar el tiempo de expiración de los datos, teniendo en cuenta qué tan seguido varian los datos. Esta implementación de la cache permitiría disminuir la cantidad de fallos y el tiempo de respuesta promedio.
+Sin embargo, sigue habiendo muchas requests fallidas. Para atacar ese problema, una posible solución sería agrandar la caché. Por ejemplo, en el endpoint de metar esto permitiría que se almacene el resultado de varias de las estaciones, lo que disminuiría aún más la cantidad de requests realizadas a la API externa. También se podría elevar el tiempo de expiración de los datos, teniendo en cuenta qué tan seguido varian los datos. Esta implementación de la cache permitiría disminuir la cantidad de fallos y el tiempo de respuesta promedio.
 
 ## Configuracion 3: Tres servidores
 Esta última configuración consiste en tres instancias de la aplicación corriendo detras de un load balancer.
@@ -82,13 +82,9 @@ Esta última configuración consiste en tres instancias de la aplicación corrie
 #### Estadisticas para endpoint /metar
 ![config_3_metar](./imagenes_nuevas/config_3_metar.png "Estadisticas para endpoint /metar")
 
-Al aumentar las instancias de la aplicación, se obuvieron tiempos de respuesta similares. Esto lleva a pensar que la limitante del tiempo de respuesta está dado por el llamado a la API externa, y no se ve afectado al agregar instancias.
+Al haber un mayor numero de instancias aumenta la cantidad de solicitudes que puede soportar el sistema, lo que aumenta la capacidad de respuesta de la aplicación. En consecuencia, el aumento de instancias mejora la cantidad de solicitudes exitosas y disminuye los errores, dado que el sistema puede manejar un mayor volumen de solicitudes de forma simultanea, eficientemente. Esto evita congestion, el sistema se vuelve mas resistente y capaz de adaptarse a un aumento de demanda de forma optima.
 
-En cambio, se ve que en el tipo de respuestas obtenidas hay menos respuestas de error. Esto puede deberse a que el rate limit de la API externa se aplica por separado para cada una de las 3 instancias, lo que permitió que haya más requests existosas en total.
-
-Si se escala aún mas la cantidad de instancias, seguiría mejorando la cantidad de requests exitosas a la API externa.
-
-En este escenario, se logró incrementar  la confiabilidad del servidor al reducir de  la cantidad de errores. Esto se traduce en un funcionamiento más confiable y estable del sistema. Al permitir que se agreguen más instancias, el servidor tiene la capacidad de manejar una mayor cantidad de solicitudes de manera más eficiente. Esto significa que puede adaptarse mejor a un aumento en la demanda.
+Sin embargo, no se disminuyo el tiempo de respuesta.
 
 ## **Conclusión**
 
