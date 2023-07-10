@@ -87,9 +87,9 @@ Al haber un mayor numero de instancias aumenta la cantidad de solicitudes que pu
 Sin embargo, no se disminuyo el tiempo de respuesta.
 
 ## **Conclusión**
-Tras analizar los resultados, se pudo comprobar que el agregado de la caché mejoró la performance del servicio, y multiplicar las instancias del servidor permitió mejorar la confiabilidad y la escalabilidad.
+Tras analizar los resultados, se pudo comprobar que el agregado de la caché mejoró la performance del servicio, y multiplicar las instancias del servidor permitió mejorar la confiabilidad y la escalabilidad. Ambas tácticas utilizadas permiten aumentar la cantidad de peticiones exitosas de nuestro servicio. La opción de la cache tiene la desventaja de ser más costosa, por lo que no sería la primer táctica a implementar.
 
-Ambas tacticas utilizadas permiten disminuir la cantidad de requests realizadas a la API externa, lo que permite aumentar la cantidad de peticiones exitosas de nuestro servicio. La opción de la cache tiene la ventaja de ser más económica y de impactar también positivamente en la performance, por lo que sería la primer táctica a implementar .
+Comparando con el trabajo práctico 1, podemos notar que la utilización del servicio externo para la asignación de IDs provocó que aumente el tiempo de procesamiento de cada petición, lo que hizo que también disminuya la capacidad de respuesta de nuestro servicio.
 
 El tercer caso demuestra los beneficios de montar este tipo de sistemas en la nube, utilizando Terraform y Ansible, ya que nos permitieron escalar de manera horizontal  rapidamente, sin realizar demasiadas configuraciones adicionales.
 
