@@ -12,8 +12,8 @@ config:
     - name: Pause
       pause: 5
     - name: Plain
-      duration: 120
-      arrivalRate: 1
+      duration: 180
+      arrivalCount: 90
     
 
 scenarios:

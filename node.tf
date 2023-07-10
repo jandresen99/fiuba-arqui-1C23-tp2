@@ -96,8 +96,8 @@ resource "azurerm_lb_backend_address_pool" "lb_backend_address_pool" {
   name            = "lb_backend_address_pool"
 }
 
-/* resource "azurerm_redis_cache" "nodecacheredishasbulla080723" {
-  name                = "nodecacheredishasbulla080723"
+/* resource "azurerm_redis_cache" "nodecacheredishasbullafdsfhsdfiubvro" {
+  name                = "nodecacheredishasbullafdsfhsdfiubvro"
   location            = azurerm_resource_group.tp2_resource_group.location
   resource_group_name = azurerm_resource_group.tp2_resource_group.name
   capacity            = 3
@@ -107,6 +107,6 @@ resource "azurerm_lb_backend_address_pool" "lb_backend_address_pool" {
 
   # Store redis client
   provisioner "local-exec" {
-    command = "sed -Ei.bak \"s/(host:)[^,]*,/\\1 '${azurerm_redis_cache.nodecacheredishasbulla080723.hostname}',/\" node/config.js"
+    command = "sed -Ei.bak \"s/(host:)[^,]*,/\\1 '${azurerm_redis_cache.nodecacheredishasbullafdsfhsdfiubvro.hostname}',/\" node/config.js"
   }
 } */

@@ -7,9 +7,9 @@ export default {
 
   // Redis client
   redis: {
-    host: 'nodecacheredishasbulla080723.redis.cache.windows.net',
+    host: 'nodecacheredishasbullafdsfhsdfiubvro.redis.cache.windows.net',
     port: '6379',
-    password: ''
+    password: 'IOUspbUFGcoaVNoUCvkqOHpIAUDJwoU5eAzCaC6affo='
   },
 
   datadog: {

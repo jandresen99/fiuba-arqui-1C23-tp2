@@ -18,7 +18,7 @@ const statsd = new StatsD({
 const app = express();
 const parser = new XMLParser();
 const cacheHostName = config.redis.host
-const cachePassword = ''
+const cachePassword = config.redis.password
 const redisClient = createClient({
   socket: {
     host: cacheHostName,
